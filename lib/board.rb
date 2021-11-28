@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-
 class Board
+
   attr_reader :board
 
   def initialize
@@ -21,14 +21,36 @@ class Board
   end
 
   def get_index_from_name(name)
-    if valid_index?(name)
+    if valid_name?(name)
       index = [name[0]-1,name[1]-1]
     end
   end
 
-  def valid_index?(name)
+  def valid_name?(name)
     row = name[0]
     column = name[1]
     [row < 7, row > 0, column < 8, column > 0].all?(true)
+  end
+
+  def playable_square?(name)
+    valid = false
+    if valid_name?(name)
+      index = get_index_from_name(name)
+      row = index[0]
+      column = index[1]
+      if row >=5
+        valid = true
+      elsif board[row+1][column].class == Array
+        valid = false
+      end
+    end
+    valid
+  end
+
+  def set_square_to(name, value)
+    if valid_name?(name) && playable_square?(name)
+      square_index = get_index_from_name(name)
+      @board[square_index[0]][square_index[1]] = value
+    end
   end
 end
