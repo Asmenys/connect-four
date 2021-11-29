@@ -40,7 +40,7 @@ class Board
       square_index = get_index_from_name(name)
       if square_index[0].to_i == 5
         playable = true
-      elsif @board[square_index[0]+1][square_index[1]] == ('red' || 'blue')
+      elsif @board[square_index[0] + 1][square_index[1]] == ('red' || 'blue')
         playable = true
       end
     end
