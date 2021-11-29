@@ -7,10 +7,10 @@ describe Board do
     subject(:board) { described_class.new.board }
     context 'assigns chess like notation to the squares of the board' do
       it 'a square with an index on [0][0] on the board returns a value of [1,1]' do
-        expect(board[0][0]).to eq("1,1")
+        expect(board[0][0]).to eq('1,1')
       end
       it 'a square with an index of [5][4] on the board returns a value of [6,5]' do
-        expect(board[5][4]).to eq("6,5")
+        expect(board[5][4]).to eq('6,5')
       end
       it 'an index outside of the bounds of the board returns nil' do
         expect(board[8]).to eq(nil)
