@@ -42,7 +42,7 @@ class Board
   def set_square_to(name, value)
     if valid_name?(name)
       index = get_index_from_name(name)
-      board[index[0]][index[1]] = value
+      board[index[0]][index[1]] = " #{value} "
     end
   end
 end
