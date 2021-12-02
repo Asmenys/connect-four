@@ -1,27 +1,13 @@
 # frozen_string_literal: true
-require_relative 'display'
 
+require_relative 'display'
 
 class Board
   include Display
-
   attr_reader :board
 
   def initialize
     @board = Array.new(6) { Array.new(7) }
-    name_the_squares
-  end
-
-  def name_the_squares
-    temp_row = 1
-    while temp_row <= 6
-      temp_collumn = 1
-      while temp_collumn <= 7
-        @board[temp_row - 1][temp_collumn - 1] = "#{temp_row},#{temp_collumn}"
-        temp_collumn += 1
-      end
-      temp_row += 1
-    end
   end
 
   def get_index_from_name(name)
@@ -34,23 +20,29 @@ class Board
     [row < 7, row.positive?, column < 8, column.positive?].all?(true)
   end
 
-  def playable_square?(name)
-    playable = false
+  def get_value_from_name(name)
     if valid_name?(name)
-      square_index = get_index_from_name(name)
-      if square_index[0].to_i == 5
-        playable = true
-      elsif @board[square_index[0] + 1][square_index[1]] == ('red' || 'blue')
-        playable = true
+      index = get_index_from_name(name)
+      @board[index[0]][index[1]]
+    end
+  end
+
+  def playable_square?(name)
+    result = false
+    if valid_name?(name) && get_value_from_name(name).nil?
+      if name[0] - 1 == 5
+        result = true
+      elsif get_value_from_name([name[0] + 1, name[1]]).nil? == false
+        result = true
       end
     end
-    playable
+    result
   end
 
   def set_square_to(name, value)
-    if playable_square?(name)
-      square_index = get_index_from_name(name)
-      @board[square_index[0]][square_index[1]] = value
+    if valid_name?(name)
+      index = get_index_from_name(name)
+      board[index[0]][index[1]] = value
     end
   end
 end

@@ -3,21 +3,6 @@
 require_relative '../lib/board'
 
 describe Board do
-  describe '#name_the_squares' do
-    subject(:board) { described_class.new.board }
-    context 'assigns chess like notation to the squares of the board' do
-      it 'a square with an index on [0][0] on the board returns a value of [1,1]' do
-        expect(board[0][0]).to eq('1,1')
-      end
-      it 'a square with an index of [5][4] on the board returns a value of [6,5]' do
-        expect(board[5][4]).to eq('6,5')
-      end
-      it 'an index outside of the bounds of the board returns nil' do
-        expect(board[8]).to eq(nil)
-      end
-    end
-  end
-
   describe '#valid_name?' do
     subject(:board) { described_class.new }
     context 'this whether the given name of the square is within the bounds of the board' do
@@ -41,43 +26,45 @@ describe Board do
       end
     end
   end
-  describe '#playable_square?' do
+  describe '#get_value_from_name' do
     subject(:board) { described_class.new }
-    context 'returns a bool given a name of a square based on its surroundings' do
-      it 'when given a name that is not "playable"' do
-        name = [1, 3]
-        expect(board.playable_square?(name)).to be false
-      end
-      it 'when given a name that is outside of the bounds of the board' do
-        name = [8, 32]
-        expect(board.playable_square?(name)).to be false
-      end
-      it 'when given a valid name' do
-        name = [6, 7]
-        expect(board.playable_square?(name)).to be true
+    context 'returns the value of the square with a given name' do
+      it 'when given a name of a square that contains "red"' do
+        name = [5, 4]
+        board.set_square_to(name, 'red')
+        expect(board.get_value_from_name(name)).to eq('red')
       end
     end
   end
-
+  describe '#playable_square?' do
+    subject(:board) { described_class.new }
+    context 'returns a bool based on whether or not the square is playable' do
+      it 'when given a square that is outside the bounds of the board it returns false' do
+        expect(board.playable_square?([5464, 45_324])).to be false
+      end
+      it 'when given the most bottom square it returns true' do
+        expect(board.playable_square?([6, 7])).to be true
+      end
+      it 'when given a square below which is an occupied square returns true' do
+        board.set_square_to([6, 7], 'red')
+        expect(board.playable_square?([5, 7])).to be true
+      end
+      it 'when given a square that is not playable returns false' do
+        expect(board.playable_square?([3, 5])).to be false
+      end
+    end
+  end
   describe '#set_square_to' do
     subject(:board) { described_class.new }
-    context 'sets the given square to the given value' do
-      it 'when given an out-of-bounds square does nothing' do
-        name = [76, 23]
-        value = 'man'
-        expect(board.set_square_to(name, value)).to be nil
-      end
-      it 'when given a square that is not playable does nothing' do
-        name = [3, 4]
-        value = 'whatever'
-        expect(board.set_square_to(name, value)).to be nil
-      end
-      it 'when given a proper square sets it to the given value' do
+    context 'sets the given squares value to provided arg' do
+      it 'when given a square with valid name' do
         name = [6, 7]
-        square_index = board.get_index_from_name(name)
-        value = 'woohoo'
-        board.set_square_to(name, value)
-        expect(board.board[square_index[0]][square_index[1]]).to eq(value)
+        board.set_square_to(name, 'red')
+        expect(board.get_value_from_name(name)).to eq('red')
+      end
+      it 'when given a square with invalid name' do
+        name = [534, 63]
+        expect(board.set_square_to(name, 'red')).to be nil
       end
     end
   end
