@@ -6,7 +6,6 @@ require_relative 'player'
 class Game
   def initialize(player_one_name, player_two_name)
     @board = Board.new
-
     @player_one = Player.new(player_one_name, "\u26AB")
     @player_two = Player.new(player_two_name, "\u26AA")
     @turn = 1
@@ -34,22 +33,26 @@ class Game
   def game_turn
     system 'clear'
     display_game
-    if @turn % 2 == 0
+    if @turn.even?
       p "#{@player_two.name}'s turn"
       temp_color = @player_two.color
-    else 
+    else
       p "#{@player_one.name}'s turn"
       temp_color = @player_one.color
     end
     name = get_player_input
     @board.set_square_to(name, temp_color)
-    #check for win
+    # check for win
     @turn += 1
-    game_turn
+    if @turn == @max_turns
+      p 'The game is a draw'
+    else
+      game_turn
+    end
   end
 end
 
-#ze lup
+# ze lup
 #   get playerinput
 #   update the board accordingly
 #   check for wins

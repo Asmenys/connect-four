@@ -42,7 +42,62 @@ class Board
   def set_square_to(name, value)
     if valid_name?(name)
       index = get_index_from_name(name)
-      board[index[0]][index[1]] = " #{value} "
+      board[index[0]][index[1]] = value.to_s
     end
+  end
+  # *basically whenever you make a move
+  # *take the square that you made a move to
+  # *check it horizontally, vertically, diagonaly
+  # *return a bool
+
+  def check_for_win(square_name, player_color)
+    index = get_index_from_name(square_name)
+    column = index[1]
+    row = index[0]
+    [check_arr_for_win(column_to_arr(column), player_color),
+     check_arr_for_win(@board[row], player_color),
+     check_arr_for_win(diagonal_to_arr(square_name), player_color)].any?(true)
+  end
+
+  def check_arr_for_win(array, player_color)
+    consecutive_squares = 0
+    array.each do |value|
+      if value == player_color
+        consecutive_squares += 1
+        break if consecutive_squares == 4
+      else
+        consecutive_squares = 0
+      end
+    end
+    consecutive_squares == 4
+  end
+
+  def column_to_arr(column)
+    row = 0
+    column_array = []
+    while row <= 5
+      column_array << @board[row][column]
+      row += 1
+    end
+    column_array
+  end
+
+  def diagonal_to_arr(square_name)
+    array = [get_value_from_name(square_name)]
+    temp_row = square_name[0]
+    temp_col = square_name[1]
+    while temp_col > 1 && temp_row > 1
+      array << get_value_from_name([temp_row - 1, temp_col - 1])
+      temp_col -= 1
+      temp_row -= 1
+    end
+    temp_row = square_name[0]
+    temp_col = square_name[1]
+    while temp_row < 7 && temp_col < 8
+      array << get_value_from_name([temp_row + 1, temp_col + 1])
+      temp_col += 1
+      temp_row += 1
+    end
+    array
   end
 end

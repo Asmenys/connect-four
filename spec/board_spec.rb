@@ -68,4 +68,34 @@ describe Board do
       end
     end
   end
+  describe '#check_for_win' do
+    subject(:board) { described_class.new }
+    context 'when theres a horizontal win condition' do
+      it 'returns true' do
+        board.set_square_to([6, 7], 'r')
+        board.set_square_to([6, 6], 'r')
+        board.set_square_to([6, 5], 'r')
+        board.set_square_to([6, 4], 'r')
+        expect(board.check_for_win([6, 7], 'r')).to be true
+      end
+    end
+    context 'when theres a vertical win condition' do
+      it 'returns true' do
+        board.set_square_to([6, 7], 'r')
+        board.set_square_to([5, 7], 'r')
+        board.set_square_to([4, 7], 'r')
+        board.set_square_to([3, 7], 'r')
+        expect(board.check_for_win([3, 7], 'r')).to be true
+      end
+    end
+    context 'when theres a diagonal win condition' do
+      it 'returns true' do
+        board.set_square_to([6, 7], 'r')
+        board.set_square_to([5, 6], 'r')
+        board.set_square_to([4, 5], 'r')
+        board.set_square_to([3, 4], 'r')
+        expect(board.check_for_win([3, 4], 'r')).to be true
+      end
+    end
+  end
 end

@@ -12,7 +12,7 @@ module Display
         string += if value.nil?
                     '|   '
                   else
-                    "|#{value}"
+                    "| #{value} "
                   end
       end
       string += '|'
