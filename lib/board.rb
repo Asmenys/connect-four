@@ -42,13 +42,9 @@ class Board
   def set_square_to(name, value)
     if valid_name?(name)
       index = get_index_from_name(name)
-      board[index[0]][index[1]] = value.to_s
+      board[index[0]][index[1]] = value
     end
   end
-  # *basically whenever you make a move
-  # *take the square that you made a move to
-  # *check it horizontally, vertically, diagonaly
-  # *return a bool
 
   def check_for_win(square_name, player_color)
     index = get_index_from_name(square_name)
@@ -59,6 +55,8 @@ class Board
      check_arr_for_win(diagonal_to_arr(square_name, 'up_to_left'), player_color),
      check_arr_for_win(diagonal_to_arr(square_name, 'up_to_right'), player_color)].any?(true)
   end
+
+  private
 
   def check_arr_for_win(array, player_color)
     consecutive_squares = 0

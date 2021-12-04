@@ -30,31 +30,29 @@ class Game
     name
   end
 
-  def game_turn
+  def play
     system 'clear'
     display_game
     if @turn.even?
       p "#{@player_two.name}'s turn"
-      temp_color = @player_two.color
+      temp_player = @player_two
     else
       p "#{@player_one.name}'s turn"
-      temp_color = @player_one.color
+      temp_player = @player_one
     end
     name = get_player_input
-    @board.set_square_to(name, temp_color)
-    # check for win
-    @turn += 1
-    if @turn == @max_turns
-      p 'The game is a draw'
+    @board.set_square_to(name, temp_player.color)
+    if @board.check_for_win(name, temp_player.color) == true
+      system 'clear'
+      @board.print_board
+      p "GG, #{temp_player.name} has won the game in #{@turn} turns!"
     else
-      game_turn
+      @turn += 1
+      if @turn == @max_turns
+        p 'The game is a draw'
+      else
+        play
+      end
     end
   end
 end
-
-# ze lup
-#   get playerinput
-#   update the board accordingly
-#   check for wins
-#   increment the turns by 1
-#   rinse and repeat
