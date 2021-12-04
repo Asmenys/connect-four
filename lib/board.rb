@@ -56,7 +56,8 @@ class Board
     row = index[0]
     [check_arr_for_win(column_to_arr(column), player_color),
      check_arr_for_win(@board[row], player_color),
-     check_arr_for_win(diagonal_to_arr(square_name), player_color)].any?(true)
+     check_arr_for_win(diagonal_to_arr(square_name, 'up_to_left'), player_color),
+     check_arr_for_win(diagonal_to_arr(square_name, 'up_to_right'), player_color)].any?(true)
   end
 
   def check_arr_for_win(array, player_color)
@@ -82,21 +83,30 @@ class Board
     column_array
   end
 
-  def diagonal_to_arr(square_name)
-    array = [get_value_from_name(square_name)]
+  def diagonal_to_arr(square_name, directions)
+    array = []
     temp_row = square_name[0]
     temp_col = square_name[1]
-    while temp_col > 1 && temp_row > 1
-      array << get_value_from_name([temp_row - 1, temp_col - 1])
+    while temp_col >= 1 && temp_row >= 1
       temp_col -= 1
-      temp_row -= 1
+      if directions == 'up_to_left'
+        temp_row -= 1
+      else
+        temp_row += 1
+      end
+      array << get_value_from_name([temp_row, temp_col])
     end
+    array << get_value_from_name(square_name)
     temp_row = square_name[0]
     temp_col = square_name[1]
-    while temp_row < 7 && temp_col < 8
-      array << get_value_from_name([temp_row + 1, temp_col + 1])
+    while temp_row <= 6 && temp_col <= 7
       temp_col += 1
-      temp_row += 1
+      if directions == 'up_to_left'
+        temp_row += 1
+      else
+        temp_row -= 1
+      end
+      array << get_value_from_name([temp_row, temp_col])
     end
     array
   end
